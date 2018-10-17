@@ -562,6 +562,7 @@ abstract class moodleform {
      * @return bool true if form data valid
      */
     function validate_defined_fields($validateonnosubmit=false) {
+        global $CFG;
         $mform =& $this->_form;
         if ($this->no_submit_button_pressed() && empty($validateonnosubmit)){
             return false;
@@ -604,6 +605,14 @@ abstract class moodleform {
 
             // Let the form instance validate the submitted values.
             $data = $mform->exportValues();
+
+            if ($mform->_formName == 'login_signup_form') {
+                if ($CFG->createuserwithemail) {
+                    $data['username'] = $data['email'];
+                    $data['email2'] = $data['email'];
+                }
+            }
+
             $moodle_val = $this->validation($data, $files);
             if ((is_array($moodle_val) && count($moodle_val)!==0)) {
                 // non-empty array means errors

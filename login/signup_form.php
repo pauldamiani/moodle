@@ -38,9 +38,18 @@ class login_signup_form extends moodleform implements renderable, templatable {
         $mform->addElement('header', 'createuserandpass', get_string('createuserandpass'), '');
 
 
-        $mform->addElement('text', 'username', get_string('username'), 'maxlength="100" size="12" autocapitalize="none"');
-        $mform->setType('username', PARAM_RAW);
-        $mform->addRule('username', get_string('missingusername'), 'required', null, 'client');
+        if (!$CFG->createuserwithemail) {
+            $mform->addElement('text', 'username', get_string('username'), 'maxlength="100" size="12" autocapitalize="none"');
+            $mform->setType('username', PARAM_RAW);
+            $mform->addRule('username', get_string('missingusername'), 'required', null, 'client');
+        }
+
+        if ($CFG->createuserwithemail) {
+            $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="25"');
+            $mform->setType('email', core_user::get_property_type('email'));
+            $mform->addRule('email', get_string('missingemail'), 'required', null, 'client');
+            $mform->setForceLtr('email');
+        }
 
         if (!empty($CFG->passwordpolicy)){
             $mform->addElement('static', 'passwordpolicyinfo', '', print_password_policy());
@@ -51,15 +60,18 @@ class login_signup_form extends moodleform implements renderable, templatable {
 
         $mform->addElement('header', 'supplyinfo', get_string('supplyinfo'),'');
 
-        $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="25"');
-        $mform->setType('email', core_user::get_property_type('email'));
-        $mform->addRule('email', get_string('missingemail'), 'required', null, 'client');
-        $mform->setForceLtr('email');
+        if (!$CFG->createuserwithemail) {
+            $mform->addElement('text', 'email', get_string('email'), 'maxlength="100" size="25"');
+            $mform->setType('email', core_user::get_property_type('email'));
+            $mform->addRule('email', get_string('missingemail'), 'required', null, 'client');
+            $mform->setForceLtr('email');
 
-        $mform->addElement('text', 'email2', get_string('emailagain'), 'maxlength="100" size="25"');
-        $mform->setType('email2', core_user::get_property_type('email'));
-        $mform->addRule('email2', get_string('missingemail'), 'required', null, 'client');
-        $mform->setForceLtr('email2');
+            $mform->addElement('text', 'email2', get_string('emailagain'), 'maxlength="100" size="25"');
+            $mform->setType('email2', core_user::get_property_type('email'));
+            $mform->addRule('email2', get_string('missingemail'), 'required', null, 'client');
+            $mform->setForceLtr('email2');
+        }
+
 
         $namefields = useredit_get_required_name_fields();
         foreach ($namefields as $field) {

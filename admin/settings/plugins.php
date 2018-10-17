@@ -114,6 +114,8 @@ if ($hassiteconfig) {
         new lang_string('configdenyemailaddresses', 'admin'), '', PARAM_NOTAGS);
     $setting->set_force_ltr(true);
     $temp->add($setting);
+    $temp->add(new admin_setting_configcheckbox('createuserwithemail', new lang_string('createuserwithemail', 'admin'),
+        new lang_string('configcreateuserwithemail', 'admin'), 0));
     $temp->add(new admin_setting_configcheckbox('verifychangedemail', new lang_string('verifychangedemail', 'admin'), new lang_string('configverifychangedemail', 'admin'), 1));
 
     $setting = new admin_setting_configtext('recaptchapublickey', new lang_string('recaptchapublickey', 'admin'), new lang_string('configrecaptchapublickey', 'admin'), '', PARAM_NOTAGS);

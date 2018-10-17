@@ -181,6 +181,7 @@ $string['configcourserequestnotify'] = 'Type username of user to be notified whe
 $string['configcourserequestnotify2'] = 'Users who will be notified when a course is requested. Only users who can approve course requests are listed here.';
 $string['configcoursesperpage'] = 'Enter the number of courses to be displayed per page in a course listing.';
 $string['configcourseswithsummarieslimit'] = 'The maximum number of courses to display in a course listing including summaries before falling back to a simpler listing.';
+$string['configcreateuserwithemail'] = 'Forces the users email to be their username when signing up to the system';
 $string['configcronclionly'] = 'Running the cron from a web browser can expose privileged information to anonymous users. Thus it is recommended to only run the cron from the command line or set a cron password for remote access.';
 $string['configcronremotepassword'] = 'This means that the cron.php script cannot be run from a web browser without supplying the password using the following form of URL:<pre> https://site.example.com/admin/cron.php?password=opensesame </pre>If this is left empty, no password is required.';
 $string['configcurlcache'] = 'Time-to-live for cURL cache, in seconds.';
@@ -410,6 +411,7 @@ $string['courserequestspending'] = 'Pending course requests';
 $string['courses'] = 'Courses';
 $string['coursesperpage'] = 'Courses per page';
 $string['courseswithsummarieslimit'] = 'Courses with summaries limit';
+$string['createuserwithemail'] = 'Use email as username';
 $string['creatornewroleid'] = 'Creators\' role in new courses';
 $string['creatornewroleid_help'] = 'If the user does not already have the permission to manage the new course, the user is automatically enrolled using this role.';
 $string['cron'] = 'Cron';
