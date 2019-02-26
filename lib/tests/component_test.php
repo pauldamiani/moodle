@@ -473,7 +473,7 @@ class core_component_testcase extends advanced_testcase {
         $this->assertEquals(array(), array_keys($list));
     }
 
-    public function test_get_component_classes_int_namespace() {
+    public function test_get_component_classes_in_namespace() {
 
         // Unexisting.
         $this->assertCount(0, core_component::get_component_classes_in_namespace('core_unexistingcomponent', 'something'));
@@ -493,7 +493,7 @@ class core_component_testcase extends advanced_testcase {
         $this->assertCount(1, core_component::get_component_classes_in_namespace('auth_cas', 'task'));
         $this->assertCount(1, core_component::get_component_classes_in_namespace('auth_cas', '\\task'));
 
-        // Core as a component works, the funcion can normalise the component name.
+        // Core as a component works, the function can normalise the component name.
         $this->assertCount(7, core_component::get_component_classes_in_namespace('core', 'update'));
         $this->assertCount(7, core_component::get_component_classes_in_namespace('', 'update'));
         $this->assertCount(7, core_component::get_component_classes_in_namespace('moodle', 'update'));
