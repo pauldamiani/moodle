@@ -838,6 +838,29 @@ function grade_print_tabs($active_type, $active_plugin, $plugin_info, $return=fa
 }
 
 /**
+ * Print grading plugin selection tab-based content.
+ *
+ * @param string $data string containing the html markup
+ * @param string $divid provide the div with a unique ID.
+ * @param string $arialabel provide an attribute that establishes 
+ *  relationships between objects and their label
+ * @param boolean $return return as string
+ *
+ * @return nothing or string if $return true
+ */
+function print_tabcontainer($content = '', $divid, $arialabel, $return = false) {
+    global $OUTPUT;
+
+    $output = $OUTPUT->tabcontainer($content, $divid, $arialabel);
+    if ($return) {
+        return $output;
+    } else {
+        print $output;
+        return !empty($output);
+    }
+}
+
+/**
  * grade_get_plugin_info
  *
  * @param int    $courseid The course id
