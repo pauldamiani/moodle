@@ -15,30 +15,19 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template core/tabtree
+    @template core/tabcontainer_header
 
     Tab tree.
 
     Example context (json):
     {
-        "tabs": [{
-            "active": "true",
-            "inactive": "false",
-            "link": [{
-                "link": "http://moodle.org"
-            }],
-            "title": "Moodle.org",
-            "text": "Moodle community"
-        }]
+        "data": "<p>Content displayed under the tabs</p>",
+        "divid": "related-tab",
+        "arialabel": "related-tab"
     }
 }}
-<ul class="nav nav-tabs mb-3" role="tablist">
-  {{#tabs}}
-    <li class="nav-item">
-      <a class="nav-link{{#active}} active{{/active}}{{#inactive}} disabled{{/inactive}}" aria-selected="{{#active}}true{{/active}}{{^active}}false{{/active}}" href="{{#link}}{{{link}}}{{/link}}{{^link}}#{{/link}}" title="{{title}}" role="tab" aria-contorls="{{label}}-tab" id="{{label}}">{{{text}}}</a>
-    </li>
-  {{/tabs}}
-</ul>
-{{#secondrow}}
-  {{>core/tabtree}}
-{{/secondrow}}
+<div tabindex="0" role="tabpanel" id="{{{divid}}}-tab" aria-labelledby="{{{arialabel}}}">
+{{#data}}
+  {{{data}}}
+{{/data}}
+</div>

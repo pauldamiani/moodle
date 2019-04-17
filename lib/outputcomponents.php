@@ -3883,6 +3883,7 @@ class tabobject implements renderable, templatable {
             'inactive' => !$active && $this->inactive,
             'active' => $active,
             'level' => $this->level,
+            'label' => preg_replace('/^-+|-+$/', '', strtolower(preg_replace('/[^a-zA-Z0-9]+/', '-', $this->title))),
         ];
     }
 
@@ -4049,6 +4050,43 @@ class tabtree extends tabobject {
         ];
     }
 }
+
+class tabcontainer implements renderable, templatable {
+    /**
+     * Constuctor for tab container
+     *
+     * @param string $data string containing the html markup
+     * @param string $divid provide the div with a unique ID.
+     * @param string $arialabel provide an attribute that establishes 
+     *  relationships between objects and their label
+     */
+    public function __construct($data = '', $divid, $arialabel)
+    {
+        $this->data = $data;
+        $this->divid = $divid;
+        $this->arialabel = $arialabel;
+    }
+
+    /**
+     * Export for template.
+     *
+     * @param renderer_base $output Renderer.
+     * @return object
+     */
+    public function export_for_template(renderer_base $output)
+    {
+        $data = $this->data;
+        $divid = $this->divid;
+        $arialabel = $this->arialabel;
+
+        return (object)[
+            'data' => $data,
+            'divid' => $divid,
+            'arialabel' => $arialabel
+        ];
+    }
+}
+
 
 /**
  * An action menu.

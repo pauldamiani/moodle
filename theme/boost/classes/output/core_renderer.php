@@ -301,6 +301,21 @@ class core_renderer extends \core_renderer {
     }
 
     /**
+     * Renders tabcontainer
+     *
+     * @param tabcontainer $tabcontainer
+     * @return string
+     */
+    protected function render_tab_container(tabcontainer $tabcontainer)
+    {
+        if (empty($tabcontainer)) {
+            return '';
+        }
+        $data = $tabcontainer->export_for_template($this);
+        return $this->render_from_template('core/tabcontainer', $data);
+    }
+
+    /**
      * Renders tabobject (part of tabtree)
      *
      * This function is called from {@link core_renderer::render_tabtree()}
