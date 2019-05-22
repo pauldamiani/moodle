@@ -237,7 +237,7 @@ if (grade_regrade_final_grades_if_required($course, $grade_edit_tree_index_check
 print_grade_page_head($courseid, 'settings', 'setup', get_string('gradebooksetup', 'grades'));
 
 // Print Table of categories and items
-echo $OUTPUT->box_start('gradetreebox generalbox');
+$content .= $OUTPUT->box_start('gradetreebox generalbox');
 
 //did we update something in the db and thus invalidate $grade_edit_tree?
 if ($recreatetree) {
@@ -266,27 +266,27 @@ if ($weightsadjusted) {
 
 $tpldata->table = html_writer::table($grade_edit_tree->table);
 
-echo $OUTPUT->render_from_template('core_grades/edit_tree', $tpldata);
+$content .= $OUTPUT->render_from_template('core_grades/edit_tree', $tpldata);
 
-echo $OUTPUT->box_end();
+$content .= $OUTPUT->box_end();
 
 // Print action buttons
-echo $OUTPUT->container_start('buttons mdl-align');
+$content .= $OUTPUT->container_start('buttons mdl-align');
 
 if ($moving) {
-    echo $OUTPUT->single_button(new moodle_url('index.php', array('id'=>$course->id)), get_string('cancel'), 'get');
+    $content .= $OUTPUT->single_button(new moodle_url('index.php', array('id'=>$course->id)), get_string('cancel'), 'get');
 } else {
-    echo $OUTPUT->single_button(new moodle_url('category.php', array('courseid'=>$course->id)), get_string('addcategory', 'grades'), 'get');
-    echo $OUTPUT->single_button(new moodle_url('item.php', array('courseid'=>$course->id)), get_string('additem', 'grades'), 'get');
+    $content .= $OUTPUT->single_button(new moodle_url('category.php', array('courseid'=>$course->id)), get_string('addcategory', 'grades'), 'get');
+    $content .= $OUTPUT->single_button(new moodle_url('item.php', array('courseid'=>$course->id)), get_string('additem', 'grades'), 'get');
 
     if (!empty($CFG->enableoutcomes)) {
-        echo $OUTPUT->single_button(new moodle_url('outcomeitem.php', array('courseid'=>$course->id)), get_string('addoutcomeitem', 'grades'), 'get');
+        $content .= $OUTPUT->single_button(new moodle_url('outcomeitem.php', array('courseid'=>$course->id)), get_string('addoutcomeitem', 'grades'), 'get');
     }
 
     //echo $OUTPUT->(new moodle_url('index.php', array('id'=>$course->id, 'action'=>'autosort')), get_string('autosort', 'grades'), 'get');
 }
 
-echo $OUTPUT->container_end();
+$content .= $OUTPUT->container_end();
 
 $PAGE->requires->yui_module('moodle-core-formchangechecker',
     'M.core_formchangechecker.init',
@@ -296,6 +296,7 @@ $PAGE->requires->yui_module('moodle-core-formchangechecker',
 );
 $PAGE->requires->string_for_js('changesmadereallygoaway', 'moodle');
 
+print_tabcontainer($content, get_string('gradebooksetuptablabel', 'grades'), get_string('gradebooksetuptablabel', 'grades'));
 echo $OUTPUT->footer();
 die;
 

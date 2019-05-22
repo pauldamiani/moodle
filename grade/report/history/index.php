@@ -107,7 +107,8 @@ if ($table->is_downloading()) {
 
 // Print header.
 print_grade_page_head($COURSE->id, 'report', 'history', get_string('pluginname', 'gradereport_history'), false, '');
-$mform->display();
+$content .= $mform->render();
+print_tabcontainer($content, get_string('tablabel', 'gradereport_history'), get_string('tablabel', 'gradereport_history'));
 
 if ($showreport) {
     // Only display report after form has been submitted.

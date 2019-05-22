@@ -34,6 +34,7 @@ require_capability('moodle/grade:export', $context);
 require_capability('gradeexport/txt:view', $context);
 
 print_grade_page_head($COURSE->id, 'export', 'txt', get_string('exportto', 'grades') . ' ' . get_string('pluginname', 'gradeexport_txt'));
+
 export_verify_grades($COURSE->id);
 
 if (!empty($CFG->gradepublishing)) {
@@ -61,10 +62,11 @@ if (($groupmode == SEPARATEGROUPS) &&
     die;
 }
 
-groups_print_course_menu($course, 'index.php?id='.$id);
-echo '<div class="clearer"></div>';
+$content .= groups_print_course_menu($course, 'index.php?id='.$id, true);
+$content .= '<div class="clearer"></div>';
 
-$mform->display();
+$content .= $mform->render();
 
+print_tabcontainer($content, get_string('tablabel', 'gradeexport_txt'), get_string('tablabel', 'gradeexport_txt'));
 echo $OUTPUT->footer();
 

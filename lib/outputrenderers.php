@@ -3844,6 +3844,19 @@ EOD;
     }
 
     /**
+     * Renders tab content
+     *
+     * @param string $data string containing the html markup
+     * @param string $divid provide the div with a unique ID.
+     * @param string $arialabel provide an attribute that establishes 
+     *  relationships between objects and their label
+     * @return string
+     */
+    public final function tabcontainer($data = '', $divid, $arialabel) {
+        return $this->render(new tabcontainer($data, $divid, $arialabel));
+    }
+
+    /**
      * Renders tabtree
      *
      * @param tabtree $tabtree

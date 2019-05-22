@@ -62,10 +62,11 @@ if (($groupmode == SEPARATEGROUPS) &&
     die;
 }
 
-groups_print_course_menu($course, 'index.php?id='.$id);
-echo '<div class="clearer"></div>';
+$content .= groups_print_course_menu($course, 'index.php?id='.$id, true);
+$content .= '<div class="clearer"></div>';
 
-$mform->display();
+$content .= $mform->render();
 
+print_tabcontainer($content, get_string('tablabel', 'gradeexport_xml'), get_string('tablabel', 'gradeexport_xml'));
 echo $OUTPUT->footer();
 

@@ -74,7 +74,8 @@ if (!$iid) {
         $csvimport->load_csv_content($text, $formdata->encoding, $separator, $formdata->previewrows);
         $csvimporterror = $csvimport->get_error();
         if (!empty($csvimporterror)) {
-            echo $renderer->errors(array($csvimport->get_error()));
+            $content .= $renderer->errors(array($csvimport->get_error()));
+            print_tabcontainer($content, get_string('tablabel', 'gradeimport_csv'), get_string('tablabel', 'gradeimport_csv'));
             echo $OUTPUT->footer();
             die();
         }
@@ -82,7 +83,8 @@ if (!$iid) {
         echo $renderer->import_preview_page($csvimport->get_headers(), $csvimport->get_previewdata());
     } else {
         // Display the standard upload file form.
-        echo $renderer->standard_upload_file_form($course, $mform);
+        $content .= $renderer->standard_upload_file_form($course, $mform);
+        print_tabcontainer($content, get_string('tablabel', 'gradeimport_csv'), get_string('tablabel', 'gradeimport_csv'));
         echo $OUTPUT->footer();
         die();
     }
@@ -120,11 +122,15 @@ if ($formdata = $mform2->get_data()) {
     } else {
         $errors = $gradeimport->get_gradebookerrors();
         $errors[] = get_string('importfailed', 'grades');
-        echo $renderer->errors($errors);
+        $content .= $renderer->errors($errors);
     }
+    $content .= '</div>';
+    print_tabcontainer($content, get_string('tablabel', 'gradeimport_csv'), get_string('tablabel', 'gradeimport_csv'));
     echo $OUTPUT->footer();
 } else {
     // If data hasn't been submitted then display the data mapping form.
-    $mform2->display();
+    $content .= $mform2->render();
+    $content .= '</div>';
+    print_tabcontainer($content, get_string('tablabel', 'gradeimport_csv'), get_string('tablabel', 'gradeimport_csv'));
     echo $OUTPUT->footer();
 }

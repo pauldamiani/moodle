@@ -128,6 +128,8 @@ grade_regrade_final_grades_if_required($course);
 // Print header
 print_grade_page_head($COURSE->id, 'report', 'grader', $reportname, false, $buttons);
 
+$content = '';
+
 //Initialise the grader report object that produces the table
 //the class grade_report_grader_ajax was removed as part of MDL-21562
 $report = new grade_report_grader($courseid, $gpr, $context, $page, $sortitemid);
@@ -135,8 +137,8 @@ $numusers = $report->get_numusers(true, true);
 
 // make sure separate group does not prevent view
 if ($report->currentgroup == -2) {
-    echo $OUTPUT->heading(get_string("notingroup"));
-    echo $OUTPUT->footer();
+    $content .= $OUTPUT->heading(get_string("notingroup"));
+    $content .= $OUTPUT->footer();
     exit;
 }
 
@@ -150,7 +152,7 @@ if ($data = data_submitted() and confirm_sesskey() and has_capability('moodle/gr
 // final grades MUST be loaded after the processing
 $report->load_users();
 $report->load_final_grades();
-echo $report->group_selector;
+$content .= $report->group_selector;
 
 // User search
 $url = new moodle_url('/grade/report/grader/index.php', array('id' => $course->id));
@@ -158,17 +160,17 @@ $firstinitial = isset($SESSION->gradereport['filterfirstname']) ? $SESSION->grad
 $lastinitial  = isset($SESSION->gradereport['filtersurname']) ? $SESSION->gradereport['filtersurname'] : '';
 $totalusers = $report->get_numusers(true, false);
 $renderer = $PAGE->get_renderer('core_user');
-echo $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
+$content .= $renderer->user_search($url, $firstinitial, $lastinitial, $numusers, $totalusers, $report->currentgroupname);
 
 //show warnings if any
 foreach ($warnings as $warning) {
-    echo $OUTPUT->notification($warning);
+    $content .= $OUTPUT->notification($warning);
 }
 
 $studentsperpage = $report->get_students_per_page();
 // Don't use paging if studentsperpage is empty or 0 at course AND site levels
 if (!empty($studentsperpage)) {
-    echo $OUTPUT->paging_bar($numusers, $report->page, $studentsperpage, $report->pbarurl);
+    $content .= $OUTPUT->paging_bar($numusers, $report->page, $studentsperpage, $report->pbarurl);
 }
 
 $displayaverages = true;
@@ -180,25 +182,28 @@ $reporthtml = $report->get_grade_table($displayaverages);
 
 // print submit button
 if ($USER->gradeediting[$course->id] && ($report->get_pref('showquickfeedback') || $report->get_pref('quickgrading'))) {
-    echo '<form action="index.php" enctype="application/x-www-form-urlencoded" method="post" id="gradereport_grader">'; // Enforce compatibility with our max_input_vars hack.
-    echo '<div>';
-    echo '<input type="hidden" value="'.s($courseid).'" name="id" />';
-    echo '<input type="hidden" value="'.sesskey().'" name="sesskey" />';
-    echo '<input type="hidden" value="'.time().'" name="timepageload" />';
-    echo '<input type="hidden" value="grader" name="report"/>';
-    echo '<input type="hidden" value="'.$page.'" name="page"/>';
-    echo $reporthtml;
-    echo '<div class="submit"><input type="submit" id="gradersubmit" class="btn btn-primary"
+    $content .= '<form action="index.php" enctype="application/x-www-form-urlencoded" method="post" id="gradereport_grader">'; // Enforce compatibility with our max_input_vars hack.
+    $content .= '<div>';
+    $content .= '<input type="hidden" value="'.s($courseid).'" name="id" />';
+    $content .= '<input type="hidden" value="'.sesskey().'" name="sesskey" />';
+    $content .= '<input type="hidden" value="'.time().'" name="timepageload" />';
+    $content .= '<input type="hidden" value="grader" name="report"/>';
+    $content .= '<input type="hidden" value="'.$page.'" name="page"/>';
+    $content .= $reporthtml;
+    $content .= '<div class="submit"><input type="submit" id="gradersubmit" class="btn btn-primary"
         value="'.s(get_string('savechanges')).'" /></div>';
-    echo '</div></form>';
+    $content .= '</div></form>';
 } else {
-    echo $reporthtml;
+    $content .= $reporthtml;
 }
 
 // prints paging bar at bottom for large pages
 if (!empty($studentsperpage) && $studentsperpage >= 20) {
-    echo $OUTPUT->paging_bar($numusers, $report->page, $studentsperpage, $report->pbarurl);
+    $content .= $OUTPUT->paging_bar($numusers, $report->page, $studentsperpage, $report->pbarurl);
 }
+
+// Pass everything to the container
+print_tabcontainer($content, get_string('tablabel', 'gradereport_user'), get_string('tablabel', 'gradereport_user'));
 
 $event = \gradereport_grader\event\grade_report_viewed::create(
     array(

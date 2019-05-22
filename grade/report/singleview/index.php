@@ -169,32 +169,32 @@ if (!empty($options)) {
 }
 
 if (!is_null($graderleftnav)) {
-    echo $graderleftnav;
+    $content .= $graderleftnav;
 }
 if (!is_null($graderrightnav)) {
-    echo $graderrightnav;
+    $content .= $graderrightnav;
 }
 
 if ($report->screen->supports_paging()) {
-    echo $report->screen->pager();
+    $content .= $report->screen->pager();
 }
 
 if ($report->screen->display_group_selector()) {
-    echo $report->group_selector;
+    $content .= $report->group_selector;
 }
 
-echo $report->output();
+$content .= $report->output();
 
 if ($report->screen->supports_paging()) {
-    echo $report->screen->perpage_select();
-    echo $report->screen->pager();
+    $content .= $report->screen->perpage_select();
+    $content .= $report->screen->pager();
 }
 
 if (!is_null($graderleftnav)) {
-    echo $graderleftnav;
+    $content .= $graderleftnav;
 }
 if (!is_null($graderrightnav)) {
-    echo $graderrightnav;
+    $content .= $graderrightnav;
 }
 
 $event = \gradereport_singleview\event\grade_report_viewed::create(
@@ -205,5 +205,7 @@ $event = \gradereport_singleview\event\grade_report_viewed::create(
     )
 );
 $event->trigger();
+
+print_tabcontainer($content, get_string('tablabel', 'gradereport_singleview'), get_string('tablabel', 'gradereport_singleview'));
 
 echo $OUTPUT->footer();

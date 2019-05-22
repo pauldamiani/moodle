@@ -169,11 +169,12 @@ if ($courseid) {
     print_grade_page_head($courseid, 'scale', 'scale', get_string('coursescales', 'grades'));
 }
 
-echo $OUTPUT->heading($strcustomscales, 3, 'main');
-echo html_writer::table($table);
-echo $OUTPUT->heading($strstandardscale, 3, 'main');
-echo html_writer::table($table2);
-echo $OUTPUT->container_start('buttons');
-echo $OUTPUT->single_button(new moodle_url('edit.php', array('courseid'=>$courseid)), $srtcreatenewscale);
-echo $OUTPUT->container_end();
+$content .= $OUTPUT->heading($strcustomscales, 3, 'main');
+$content .= html_writer::table($table);
+$content .= $OUTPUT->heading($strstandardscale, 3, 'main');
+$content .= html_writer::table($table2);
+$content .= $OUTPUT->container_start('buttons');
+$content .= $OUTPUT->single_button(new moodle_url('edit.php', array('courseid'=>$courseid)), $srtcreatenewscale);
+$content .= $OUTPUT->container_end();
+print_tabcontainer($content, get_string('scalestablabel', 'grades'), get_string('scalestablabel', 'grades'));
 echo $OUTPUT->footer();

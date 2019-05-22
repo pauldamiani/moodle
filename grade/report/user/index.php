@@ -125,26 +125,27 @@ if (has_capability('moodle/grade:viewall', $context)) { //Teachers will see all 
         $gui->init();
         // Add tabs
         print_grade_page_head($courseid, 'report', 'user');
-        groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)));
+        $content .= groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)),true);
 
         if ($user_selector) {
-            echo $renderer->graded_users_selector('user', $course, $userid, $currentgroup, true);
+            $content .= $renderer->graded_users_selector('user', $course, $userid, $currentgroup, true);
         }
 
-        echo $renderer->view_user_selector($userid, $userview);
+        $content .= $renderer->view_user_selector($userid, $userview);
 
         while ($userdata = $gui->next_user()) {
             $user = $userdata->user;
             $report = new grade_report_user($courseid, $gpr, $context, $user->id, $viewasuser);
 
             $studentnamelink = html_writer::link(new moodle_url('/user/view.php', array('id' => $report->user->id, 'course' => $courseid)), fullname($report->user));
-            echo $OUTPUT->heading(get_string('pluginname', 'gradereport_user') . ' - ' . $studentnamelink);
+            $content .= $OUTPUT->heading(get_string('pluginname', 'gradereport_user') . ' - ' . $studentnamelink);
 
             if ($report->fill_table()) {
-                echo '<br />'.$report->print_table(true);
+                $content .= '<br />'.$report->print_table(true);
             }
-            echo "<p style = 'page-break-after: always;'></p>";
+            $content .= "<p style = 'page-break-after: always;'></p>";
         }
+        print_tabcontainer($content, get_string('tablabel', 'gradereport_user'), get_string('tablabel', 'gradereport_user'));
         $gui->close();
     } else { // Only show one user's report
         $report = new grade_report_user($courseid, $gpr, $context, $userid, $viewasuser);
@@ -153,20 +154,20 @@ if (has_capability('moodle/grade:viewall', $context)) { //Teachers will see all 
         print_grade_page_head($courseid, 'report', 'user', get_string('pluginname', 'gradereport_user') . ' - ' . $studentnamelink,
                 false, false, true, null, null, $report->user);
 
-        groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)));
+        $content .= groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)), true);
 
         if ($user_selector) {
             $showallusersoptions = true;
-            echo $renderer->graded_users_selector('user', $course, $userid, $currentgroup, $showallusersoptions);
+            $content .= $renderer->graded_users_selector('user', $course, $userid, $currentgroup, $showallusersoptions);
         }
 
-        echo $renderer->view_user_selector($userid, $userview);
+        $content .= $renderer->view_user_selector($userid, $userview);
 
         if ($currentgroup and !groups_is_member($currentgroup, $userid)) {
-            echo $OUTPUT->notification(get_string('groupusernotmember', 'error'));
+            $content .= $OUTPUT->notification(get_string('groupusernotmember', 'error'));
         } else {
             if ($report->fill_table()) {
-                echo '<br />'.$report->print_table(true);
+                $content .= '<br />'.$report->print_table(true);
             }
         }
     }
@@ -179,7 +180,7 @@ if (has_capability('moodle/grade:viewall', $context)) { //Teachers will see all 
     print_grade_page_head($courseid, 'report', 'user', get_string('pluginname', 'gradereport_user'). ' - '.fullname($report->user));
 
     if ($report->fill_table()) {
-        echo '<br />'.$report->print_table(true);
+        $content .= '<br />'.$report->print_table(true);
     }
 }
 
@@ -187,8 +188,10 @@ if (isset($report)) {
     // Trigger report viewed event.
     $report->viewed();
 } else {
-    echo html_writer::tag('div', '', array('class' => 'clearfix'));
-    echo $OUTPUT->notification(get_string('nostudentsyet'));
+    $content .= html_writer::tag('div', '', array('class' => 'clearfix'));
+    $content .= $OUTPUT->notification(get_string('nostudentsyet'));
 }
+
+print_tabcontainer($content, get_string('tablabel', 'gradereport_user'), get_string('tablabel', 'gradereport_user'));
 
 echo $OUTPUT->footer();

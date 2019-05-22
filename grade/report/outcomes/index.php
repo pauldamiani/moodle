@@ -174,7 +174,7 @@ $html .= '</table>';
 
 print_grade_page_head($courseid, 'report', 'outcomes');
 
-echo $html;
+print_tabcontainer($html, get_string('tablabel', 'gradereport_outcomes'), get_string('tablabel', 'gradereport_outcomes'));
 
 $event = \gradereport_outcomes\event\grade_report_viewed::create(
     array(

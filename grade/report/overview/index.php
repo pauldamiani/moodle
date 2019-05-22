@@ -113,32 +113,34 @@ if (has_capability('moodle/grade:viewall', $context) && $courseid != SITEID) {
         // Add tabs
         print_grade_page_head($courseid, 'report', 'overview');
 
-        groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)));
+        $content .= groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)), true);
 
         if ($user_selector) {
             $renderer = $PAGE->get_renderer('gradereport_overview');
-            echo $renderer->graded_users_selector('overview', $course, $userid, $currentgroup, false);
+            $content .= $renderer->graded_users_selector('overview', $course, $userid, $currentgroup, false);
         }
-        // do not list all users
+        // Do not list all users
+        print_tabcontainer($content, get_string('tablabel', 'gradereport_overview'), get_string('tablabel', 'gradereport_overview'));
 
     } else { // Only show one user's report
         $report = new grade_report_overview($userid, $gpr, $context);
         print_grade_page_head($courseid, 'report', 'overview', get_string('pluginname', 'gradereport_overview') .
                 ' - ' . fullname($report->user), false, false, true, null, null, $report->user);
-        groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)));
+        groups_print_course_menu($course, $gpr->get_return_url('index.php?id='.$courseid, array('userid'=>0)), true);
 
         if ($user_selector) {
             $renderer = $PAGE->get_renderer('gradereport_overview');
-            echo $renderer->graded_users_selector('overview', $course, $userid, $currentgroup, false);
+            $content .= $renderer->graded_users_selector('overview', $course, $userid, $currentgroup, false);
         }
 
         if ($currentgroup and !groups_is_member($currentgroup, $userid)) {
-            echo $OUTPUT->notification(get_string('groupusernotmember', 'error'));
+            $content .= $OUTPUT->notification(get_string('groupusernotmember', 'error'));
         } else {
             if ($report->fill_table()) {
-                echo '<br />'.$report->print_table(true);
+                $content .= '<br />'.$report->print_table(true);
             }
         }
+        print_tabcontainer($content, get_string('tablabel', 'gradereport_overview'), get_string('tablabel', 'gradereport_overview'));
     }
 } else { // Non-admins and users viewing from the site context can just see their own report.
 
@@ -171,9 +173,10 @@ if (has_capability('moodle/grade:viewall', $context) && $courseid != SITEID) {
         } else { // We have a course context. We must be navigating from the gradebook.
             print_grade_page_head($courseid, 'report', 'overview', get_string('pluginname', 'gradereport_overview')
                     . ' - ' . fullname($report->user));
-            if ($report->fill_table()) {
-                echo '<br />' . $report->print_table(true);
+                if ($report->fill_table()) {
+                $content .= '<br />' . $report->print_table(true);
             }
+            print_tabcontainer($content, get_string('tablabel', 'gradereport_overview'), get_string('tablabel', 'gradereport_overview'));
         }
     } else {
         $PAGE->set_pagelayout('standard');

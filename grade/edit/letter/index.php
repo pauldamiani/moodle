@@ -101,7 +101,7 @@ if (!$edit) {
 
     $stredit = get_string('editgradeletters', 'grades');
     $editlink = html_writer::nonempty_tag('div', html_writer::link($returnurl.$editparam, $stredit), array('class'=>'mdl-align'));
-    echo $editlink;
+    $content .= $editlink;
 
     $table = new html_table();
     $table->id = 'grade-letters-view';
@@ -111,9 +111,11 @@ if (!$edit) {
     $table->width = '30%';
     $table->data  = $data;
     $table->tablealign  = 'center';
-    echo html_writer::table($table);
+    $content .= html_writer::table($table);
 
-    echo $editlink;
+    $content .= $editlink;
+
+    print_tabcontainer($content, get_string('letteredittablabel', 'grades'), get_string('letteredittablabel', 'grades'));
 } else { //else we're editing
     require_once('edit_form.php');
 

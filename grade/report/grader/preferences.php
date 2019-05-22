@@ -73,15 +73,16 @@ print_grade_page_head($courseid, 'settings', 'grader', get_string('preferences',
 
 // If USER has admin capability, print a link to the site config page for this report
 if (has_capability('moodle/site:config', $systemcontext)) {
-    echo '<div id="siteconfiglink"><a href="'.$CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=gradereportgrader">';
-    echo get_string('changereportdefaults', 'grades');
-    echo "</a></div>\n";
+    $content .= '<div id="siteconfiglink"><a href="'.$CFG->wwwroot.'/'.$CFG->admin.'/settings.php?section=gradereportgrader">';
+    $content .= get_string('changereportdefaults', 'grades');
+    $content .= "</a></div>\n";
 }
 
-echo $OUTPUT->box_start();
+$content .= $OUTPUT->box_start();
 
-$mform->display();
-echo $OUTPUT->box_end();
+$content .= $mform->render();
+$content .= $OUTPUT->box_end();
 
+print_tabcontainer($content, get_string('preferencetablabel', 'gradereport_grader'), get_string('preferencetablabel', 'gradereport_grader'));
 echo $OUTPUT->footer();
 

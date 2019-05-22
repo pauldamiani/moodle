@@ -86,12 +86,13 @@ print_grade_page_head($courseid, 'settings', 'coursesettings', get_string('cours
 $settings = grade_get_settings($course->id);
 $mform->set_data($settings);
 
-echo $OUTPUT->box_start('generalbox boxaligncenter boxwidthnormal centerpara');
-echo get_string('coursesettingsexplanation', 'grades');
-echo $OUTPUT->box_end();
+$content .= $OUTPUT->box_start('generalbox boxaligncenter boxwidthnormal centerpara');
+$content .= get_string('coursesettingsexplanation', 'grades');
+$content .= $OUTPUT->box_end();
 
-$mform->display();
+$content .= $mform->render();
 
+print_tabcontainer($content, get_string('coursegradesettingstablabel', 'grades'), get_string('coursegradesettingstablabel', 'grades'));
 echo $OUTPUT->footer();
 
 
